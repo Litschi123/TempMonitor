@@ -30,8 +30,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     chartView->setRenderHint(QPainter::Antialiasing);
     ui->graph_layout->addWidget(chartView);
 
+    // Set the options for the pen an background of the chart
     QPen pen(QRgb(0xFFFFFF));
-    pen.setWidth(5);
+    pen.setWidth(3);
     series->setPen(pen);
 
     QLinearGradient backgroundGradient;
