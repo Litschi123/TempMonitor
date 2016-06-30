@@ -16,6 +16,8 @@
 #include <QLinearGradient>
 #include <QPen>
 
+//Comment
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
