@@ -1,0 +1,23 @@
+var NAVTREEINDEX0 =
+{
+"annotated.html":[1,0],
+"class_main_window.html":[1,0,0],
+"class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db":[1,0,0,0],
+"class_main_window.html#abc17298493600e810834db8652ef07d6":[1,0,0,2],
+"class_main_window.html#ae98d00a93bc118200eeef9f9bba1dba7":[1,0,0,1],
+"class_temp.html":[1,0,1],
+"class_temp.html#a01725bdf952fc8aeb9e3ec4238ef4e8c":[1,0,1,1],
+"class_temp.html#a2010f3312b77f0ff5853b60fefe016f4":[1,0,1,0],
+"class_temp.html#a599fd6c9646291de791fde0b8b2553e6":[1,0,1,2],
+"class_temp.html#af7e6ec5c6aac775b855491ff26531de3":[1,0,1,3],
+"classes.html":[1,1],
+"files.html":[2,0],
+"functions.html":[1,3,0],
+"functions_func.html":[1,3,1],
+"hierarchy.html":[1,2],
+"index.html":[],
+"mainwindow_8h_source.html":[2,0,0],
+"md_C:_Users_muell_OneDrive_UNI_2._Semester_Informatik_2_Projekt_qt_Projekt_TempMonitor_README.html":[0],
+"pages.html":[],
+"temp_8h_source.html":[2,0,1]
+};

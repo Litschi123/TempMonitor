@@ -1,0 +1,48 @@
+.TH "MainWindow" 3 "Tue Jul 5 2016" "Temp Monitor" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MainWindow \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits QMainWindow\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMainWindow\fP (QWidget *parent=0)"
+.br
+.RI "\fICreates the ui and a chart, initializes the serial port\&. \fP"
+.ti -1c
+.RI "\fB~MainWindow\fP ()"
+.br
+.RI "\fIcloses the port a deletes the ui \fP"
+.ti -1c
+.RI "double \fBAvg\fP (int seconds)"
+.br
+.RI "\fIAvarages the the temperatures of the last specified seconds\&. \fP"
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "double MainWindow::Avg (int seconds)"
+
+.PP
+Avarages the the temperatures of the last specified seconds\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIseconds\fP from now 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The avarage of the temperatures of the \fBTemp\fP Object List 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Temp Monitor from the source code\&.

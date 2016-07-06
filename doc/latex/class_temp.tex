@@ -7,9 +7,8 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Temp} (double t, Q\+Date\+Time time, int i)\hypertarget{class_temp_ac0cb3f11a2a9c9b4175d2867ba50e499}{}\label{class_temp_ac0cb3f11a2a9c9b4175d2867ba50e499}
-
-\end{DoxyCompactItemize}
+\hyperlink{class_temp_a2010f3312b77f0ff5853b60fefe016f4}{Temp} (double temperature, Q\+Date\+Time time, int interval)
+\begin{DoxyCompactList}\small\item\em create a new \hyperlink{class_temp}{Temp} object for storing the temperature and time \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -26,6 +25,31 @@ int {\bfseries interval}\hypertarget{class_temp_a01725bdf952fc8aeb9e3ec4238ef4e8
 
 \subsection{Detailed Description}
 A class for storing a dataset of a temperature value and a timestamp 
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Temp@{Temp}!Temp@{Temp}}
+\index{Temp@{Temp}!Temp@{Temp}}
+\subsubsection[{\texorpdfstring{Temp(double temperature, Q\+Date\+Time time, int interval)}{Temp(double temperature, QDateTime time, int interval)}}]{\setlength{\rightskip}{0pt plus 5cm}Temp\+::\+Temp (
+\begin{DoxyParamCaption}
+\item[{double}]{temperature, }
+\item[{Q\+Date\+Time}]{time, }
+\item[{int}]{interval}
+\end{DoxyParamCaption}
+)}\hypertarget{class_temp_a2010f3312b77f0ff5853b60fefe016f4}{}\label{class_temp_a2010f3312b77f0ff5853b60fefe016f4}
+
+
+create a new \hyperlink{class_temp}{Temp} object for storing the temperature and time 
+
+
+\begin{DoxyParams}{Parameters}
+{\em temperature} & stores as a double. No unit is assoziated, but °C is used \\
+\hline
+{\em time} & as Q\+Date\+Time object \\
+\hline
+{\em interval} & of measuring the tempearture in seconds \\
+\hline
+\end{DoxyParams}
+
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
