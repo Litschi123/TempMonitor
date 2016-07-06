@@ -1,7 +1,8 @@
 #include "temp.h"
 
-Temp::Temp(double t, QDateTime time)
+Temp::Temp(double temperature, QDateTime time, int interval)
 {
-    temp = t;
+    temp = temperature;
     timestamp = time;
+    interval = interval;
 }

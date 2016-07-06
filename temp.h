@@ -10,8 +10,15 @@ class Temp
 public:
     double temp;
     QDateTime timestamp;
+    int interval;
 
-    Temp(double t, QDateTime time);
+    /**
+     * @brief create a new Temp object for storing the temperature and time
+     * @param temperature stores as a double. No unit is assoziated, but °C is used
+     * @param time as QDateTime object
+     * @param interval of measuring the tempearture in seconds
+     */
+    Temp(double temperature, QDateTime time, int interval);
 };
 
-#endif // TEMP_H
+#endif

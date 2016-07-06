@@ -16,8 +16,9 @@
 #include <QLinearGradient>
 #include <QPen>
 
-//Comment
-
+/**
+ * @brief Creates the ui and a chart, initializes the serial port.
+*/
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -26,11 +27,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // INIT CHART
     chart->legend()->hide();
     chart->setTitle("Temperature");
-    chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+    //chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
     QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
     ui->graph_layout->addWidget(chartView);
+
+    // init chart mean line
+    /*QPainter meanLine;
+    meanLine.setPen(QPen(QRgb(0xFFFFFF)));
+    meanLine.drawLine(0, 100, 0, 100);*/
 
     // Set the options for the pen an background of the chart
     QPen pen(QRgb(0xFFFFFF));
@@ -45,17 +51,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     backgroundGradient.setColorAt(0.0, QRgb(0xc0392b));
     backgroundGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     chart->setBackgroundBrush(backgroundGradient);
-
-    axisX->setTickCount(10);
-    axisX->setFormat("dd. HH:mm");
-    axisX->setTitleText("Date");
-
-    axisY->setLabelFormat("%d");
-    axisY->setTitleText("Temperature");
-
-    chart->addAxis(axisX, Qt::AlignBottom);
-    chart->addAxis(axisY, Qt::AlignLeft);
-
 
     // GET AVAILABLE COM PORTS
     QList<QSerialPortInfo> ports = QSerialPortInfo::availablePorts();
@@ -72,6 +67,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(serial, SIGNAL(readyRead()), this, SLOT(readData()));
 }
 
+/**
+ * @brief closes the port a deletes the ui
+ */
 MainWindow::~MainWindow()
 {
     if(serial->isOpen())
@@ -101,22 +99,23 @@ void MainWindow::on_btn_connect_clicked()
         serial->setParity(QSerialPort::NoParity);
         serial->setStopBits(QSerialPort::OneStop);
         serial->setFlowControl(QSerialPort::NoFlowControl);
-        bool isOpen = serial->open(QIODevice::ReadWrite);
+        serial->open(QIODevice::ReadWrite);
 
-        if(!isOpen)
-            qDebug() << serial->error();
-    } else
+        if(serial->error()) {
+            if(serial->error() == QSerialPort::SerialPortError::DeviceNotFoundError)
+                addToTerminal("<b>Error: Port not found</b>");
+            else
+                addToTerminal("<b>Error happend!</b>");
+        }
+    } else {
         serial->close();
+        addToTerminal("<b>Connection closed</b>");
+        ui->btn_connect->setText("Connect");
+    }
 
     if(serial->isOpen()) {
         addToTerminal("<b>Connection made</b>");
-        //ui->txt_terminal->append("<b>Connection made</b>\n");
         ui->btn_connect->setText("Disconnect");
-
-    } else {
-        addToTerminal("<b>Connection closed</b>");
-        //ui->txt_terminal->append("<b>Connection closed</b>\n");
-        ui->btn_connect->setText("Connect");
     }
 }
 
@@ -135,14 +134,16 @@ void MainWindow::readData(){
         QString str = data.trimmed();
         if(str.length() == 5) {
             double temp = str.toDouble();
-            showTemp(temp);
-            addDataToChart(temp);
-
             // store Temperature Values
             QDateTime momentInTime = QDateTime::currentDateTime();
-            Temp temperatureObject(temp, momentInTime);
+            Temp temperatureObject(temp, momentInTime, ui->spin_interval->value());
             tempData.append(temperatureObject);
-            //qDebug() << tempData.length() << " - " << tempData.at(tempData.length()-1).temp << " - " << tempData.at(tempData.length()-1).timestamp.toString("HH:mm:ss");
+
+            // update labels to show the data
+            showTemp(temp);
+
+            // add data to chart series
+            addDataToChart(temp);
         }
         //ui->txt_terminal->append(str);
         addToTerminal(str);
@@ -159,13 +160,25 @@ void MainWindow::handleErrors(QSerialPort::SerialPortError error){
 
 void MainWindow::showTemp(double temp) {
     QString temp_str = "<font color='%1'>%2 °C</font>";
+    QString hourTemp_str = "<font color='%1'>%2 °C</font>";
+    QString dayTemp_str = "<font color='%1'>%2 °C</font>";
+
+    double hourTemp = Avg(3600);
+    double dayTemp = Avg(86400);
 
     // Create Color for the current temperatur label
     QColor color = QColor(0,0,0);
+    QColor hourColor = QColor(0,0,0);
+    QColor dayColor = QColor(0,0,0);
+
     int lowTemp = 15;
     int normalTemp = 20;
     int highTemp = 25;
+
     int colorHue = 120;
+    int hourColorHue = 120;
+    int dayColorHue = 120;
+
     if(temp < lowTemp)
         colorHue = 240;
     if(temp > highTemp)
@@ -174,23 +187,36 @@ void MainWindow::showTemp(double temp) {
         colorHue = 120;
     color.setHsv(colorHue, 255, 200, 255);
 
-    // Set new Text for the current temperature label
+    if(hourTemp < lowTemp)
+        hourColorHue = 240;
+    if(hourTemp > highTemp)
+        hourColorHue = 0;
+    if(hourTemp > lowTemp && hourTemp < highTemp)
+        hourColorHue = 120;
+    hourColor.setHsv(hourColorHue, 255, 200, 255);
+
+    if(dayTemp < lowTemp)
+        dayColorHue = 240;
+    if(dayTemp > highTemp)
+        dayColorHue = 0;
+    if(dayTemp > lowTemp && dayTemp < highTemp)
+        dayColorHue = 120;
+    dayColor.setHsv(dayColorHue, 255, 200, 255);
+
+    // Set new Text for the temperature labels
     ui->lbl_currentTemp->setText(temp_str.arg(color.name(), QString::number(temp)));
+    ui->lbl_hourAvg->setText(hourTemp_str.arg(hourColor.name(), QString::number(hourTemp,'f', 2)));
+    ui->lbl_dayAvg->setText(dayTemp_str.arg(dayColor.name(), QString::number(dayTemp,'f', 2)));
 }
 
 void MainWindow::addDataToChart(double temp) {
-    //series->append(timestamp, temp);
     QDateTime momentInTime = QDateTime::currentDateTime();
     series->append(momentInTime.toMSecsSinceEpoch(), temp);
 
     if(chart->series().count() != 0)
         chart->removeSeries(series);
 
-    //series->attachAxis(axisX);
-    //series->attachAxis(axisY);
     chart->addSeries(series);
-
-
     chart->createDefaultAxes();
 }
 
@@ -198,4 +224,19 @@ void MainWindow::addToTerminal(QString data) {
     QDateTime currentTime = QDateTime::currentDateTime();
     QString string = currentTime.toString() + ": " + data;
     ui->txt_terminal->append(string);
+}
+
+double MainWindow::Avg(int seconds) {
+    int totalSeconds = 0;
+    double tempSum = 0;
+    int totalSets = 0;
+    for(int i=tempData.length()-1; i >= 0; i--) {
+        totalSeconds += (tempData.at(i).interval * 5);
+        tempSum += tempData.at(i).temp;
+        totalSets++;
+
+        if(totalSeconds >= seconds)
+            break;
+    }
+    return tempSum / totalSets;
 }
