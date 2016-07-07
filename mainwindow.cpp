@@ -112,6 +112,9 @@ void MainWindow::on_btn_connect_clicked()
     if(serial->isOpen()) {
         addToTerminal("<b>Connection made</b>");
         ui->btn_connect->setText("Disconnect");
+
+        // set start Time
+        startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
     }
 }
 
@@ -167,7 +170,7 @@ void MainWindow::showTemp(double temp) {
     QColor dayColor = QColor(0,0,0);
 
     int lowTemp = 15;
-    int normalTemp = 20;
+    //int normalTemp = 20;
     int highTemp = 25;
 
     int colorHue = 120;
@@ -205,8 +208,8 @@ void MainWindow::showTemp(double temp) {
 }
 
 void MainWindow::addDataToChart(double temp) {
-    QDateTime momentInTime = QDateTime::currentDateTime();
-    series->append(momentInTime.toMSecsSinceEpoch(), temp);
+    int momentInTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    series->append((momentInTime - startTime)/1000, temp);
 
     if(chart->series().count() != 0)
         chart->removeSeries(series);
@@ -245,5 +248,9 @@ void MainWindow::getComPorts() {
             ui->dd_ports->addItem(ports[i].portName());
     } else {
         addToTerminal("<b>No available ports found!</b>");
+        for(int i = 0; i < ui->dd_ports->count(); i++){
+            ui->dd_ports->removeItem(i);
+        }
+        ui->dd_ports->addItem("COM");
     }
 }

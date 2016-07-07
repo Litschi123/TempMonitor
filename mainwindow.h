@@ -51,6 +51,7 @@ private:
     QtCharts::QLineSeries *series = new QtCharts::QLineSeries();
     QtCharts::QChart *chart = new QtCharts::QChart();
     QList<Temp> tempData;
+    int startTime;
 };
 
 #endif // MAINWINDOW_H
