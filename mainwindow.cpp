@@ -52,12 +52,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     backgroundGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     chart->setBackgroundBrush(backgroundGradient);
 
-    // GET AVAILABLE COM PORTS
-    QList<QSerialPortInfo> ports = QSerialPortInfo::availablePorts();
-    if(ports.length() > 0)
-        ui->dd_ports->removeItem(0);
-    for(int i = 0; i < ports.length(); i++)
-        ui->dd_ports->addItem(ports[i].portName());
+    getComPorts();
 
     // INIT SERIAL PORT
     serial = new QSerialPort(this);
@@ -65,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // SIGNALS_N_SLOTS
     connect(serial, SIGNAL(error(QSerialPort::SerialPortError)), this, SLOT(handleErrors(QSerialPort::SerialPortError)));
     connect(serial, SIGNAL(readyRead()), this, SLOT(readData()));
+    connect(ui->dd_ports, SIGNAL(highlighted(int)), this, SLOT(getComPorts()));
 }
 
 /**
@@ -125,7 +121,6 @@ void MainWindow::on_btn_update_clicked()
     if(serial->isWritable())
         serial->write(QString::number(ui->spin_interval->value()).toStdString().c_str());
 }
-
 
 // FUNC
 void MainWindow::readData(){
@@ -239,4 +234,16 @@ double MainWindow::Avg(int seconds) {
             break;
     }
     return tempSum / totalSets;
+}
+
+void MainWindow::getComPorts() {
+    // GET AVAILABLE COM PORTS
+    QList<QSerialPortInfo> ports = QSerialPortInfo::availablePorts();
+    if(ports.length() > 0) {
+        ui->dd_ports->removeItem(0);
+        for(int i = 0; i < ports.length(); i++)
+            ui->dd_ports->addItem(ports[i].portName());
+    } else {
+        addToTerminal("<b>No available ports found!</b>");
+    }
 }

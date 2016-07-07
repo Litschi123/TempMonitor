@@ -39,6 +39,7 @@ private slots:
 
     void on_btn_connect_clicked();
     void on_btn_update_clicked();
+    void getComPorts();
 
 private:
     void showTemp(double temp);
@@ -49,8 +50,6 @@ private:
     QSerialPort *serial;
     QtCharts::QLineSeries *series = new QtCharts::QLineSeries();
     QtCharts::QChart *chart = new QtCharts::QChart();
-    QtCharts::QDateTimeAxis *axisX = new QtCharts::QDateTimeAxis;
-    QtCharts::QValueAxis *axisY = new QtCharts::QValueAxis;
     QList<Temp> tempData;
 };
 
