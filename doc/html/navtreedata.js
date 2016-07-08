@@ -1,7 +1,7 @@
 var NAVTREE =
 [
   [ "Temp Monitor", "index.html", [
-    [ "TempMonitor", "md_C:_Users_muell_OneDrive_UNI_2._Semester_Informatik_2_Projekt_qt_Projekt_TempMonitor_README.html", null ],
+    [ "TempMonitor", "md_C:_Users_muell_OneDrive_UNI_2._Semester_Informatik_2_Projekt_TempMonitor_README.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
