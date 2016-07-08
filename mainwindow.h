@@ -31,9 +31,6 @@ public:
     double Avg(int seconds);
 
 private slots:
-    void on_actionLoad_triggered();
-    void on_actionSave_triggered();
-
     void readData();
     void handleErrors(QSerialPort::SerialPortError error);
 

@@ -74,17 +74,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// MENUBAR
-void MainWindow::on_actionLoad_triggered()
-{
-
-}
-
-void MainWindow::on_actionSave_triggered()
-{
-
-}
-
 // BTN
 void MainWindow::on_btn_connect_clicked()
 {
